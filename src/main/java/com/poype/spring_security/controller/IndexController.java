@@ -1,5 +1,6 @@
 package com.poype.spring_security.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -32,11 +33,13 @@ public class IndexController {
         return result;
     }
 
+    @PreAuthorize("hasAuthority('USER_LIST')")
     @GetMapping("/user/list")
     public String userList() {
         return "User List Page";
     }
 
+    @PreAuthorize("hasAuthority('USER_ADD')")
     @GetMapping("/user/add")
     public String userAdd() {
         return "User Add Page";

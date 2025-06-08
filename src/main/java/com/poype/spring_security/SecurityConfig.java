@@ -3,6 +3,7 @@ package com.poype.spring_security;
 import com.poype.spring_security.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -10,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     // 如果不加任何配置，那会有一个默认配置，默认配置跟这里的配置是一样的
@@ -40,8 +42,8 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests((authorize) -> {
             // 必须放在anyRequest 前面
-            authorize.requestMatchers("/user/list").hasAuthority("USER_LIST");
-            authorize.requestMatchers("/user/add").hasAuthority("USER_ADD");
+//            authorize.requestMatchers("/user/list").hasAuthority("USER_LIST");
+//            authorize.requestMatchers("/user/add").hasAuthority("USER_ADD");
 
             authorize.anyRequest().authenticated();  // 所有的request都要进行认证，已经被authenticated的用户就能够access
         });
