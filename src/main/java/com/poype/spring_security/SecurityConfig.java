@@ -21,7 +21,13 @@ public class SecurityConfig {
 //        httpSecurity.httpBasic(Customizer.withDefaults());
 
         // 这行配置会增加3个filter：UsernamePasswordAuthenticationFilter、DefaultLoginPageGeneratingFilter、DefaultLogoutPageGeneratingFilter
-        httpSecurity.formLogin(Customizer.withDefaults());
+//        httpSecurity.formLogin(Customizer.withDefaults());
+
+        // 自定义登录页面
+        httpSecurity.formLogin((formLogin) -> {
+            formLogin.loginPage("/login.html").permitAll();   // 登录页面地址
+            formLogin.loginProcessingUrl("/user/login");      // 登录接口
+        });
 
         httpSecurity.authorizeHttpRequests((authorize) -> {
             authorize.anyRequest().authenticated();  // 所有的request都要进行认证，已经被authenticated的用户就能够access
