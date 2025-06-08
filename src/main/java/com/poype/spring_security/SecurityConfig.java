@@ -1,8 +1,8 @@
 package com.poype.spring_security;
 
+import com.poype.spring_security.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -31,10 +31,30 @@ public class SecurityConfig {
             // 定制参数名字，默认是 username 和 password
             formLogin.usernameParameter("test_username");
             formLogin.passwordParameter("test_password");
+
+            // 登录成功时的handler
+            formLogin.successHandler(new TestAuthenticationSuccessHandler());
+            // 登录失败时的handler
+            formLogin.failureHandler(new TestAuthenticationFailureHandler());
         });
 
         httpSecurity.authorizeHttpRequests((authorize) -> {
             authorize.anyRequest().authenticated();  // 所有的request都要进行认证，已经被authenticated的用户就能够access
+        });
+
+        // 登出成功时的handler
+        httpSecurity.logout((logout) -> {
+            logout.logoutSuccessHandler(new TestLogoutSuccessHandler());
+        });
+
+        // 当没有登陆就访问一个受限资源时的处理handler
+        httpSecurity.exceptionHandling((exception) -> {
+            exception.authenticationEntryPoint(new TestAuthenticationEntryPoint());
+        });
+
+        httpSecurity.sessionManagement((session) -> {
+            // 一个用户同一时间最多只能有一个设备登录，session超时会调用TestSessionExpiredStrategy进行处理
+            session.maximumSessions(1).expiredSessionStrategy(new TestSessionExpiredStrategy());
         });
 
         return httpSecurity.build();
