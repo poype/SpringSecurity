@@ -27,6 +27,10 @@ public class SecurityConfig {
         httpSecurity.formLogin((formLogin) -> {
             formLogin.loginPage("/login.html").permitAll();   // 登录页面地址
             formLogin.loginProcessingUrl("/user/login");      // 登录接口
+
+            // 定制参数名字，默认是 username 和 password
+            formLogin.usernameParameter("test_username");
+            formLogin.passwordParameter("test_password");
         });
 
         httpSecurity.authorizeHttpRequests((authorize) -> {
