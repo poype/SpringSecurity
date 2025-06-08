@@ -39,6 +39,10 @@ public class SecurityConfig {
         });
 
         httpSecurity.authorizeHttpRequests((authorize) -> {
+            // 必须放在anyRequest 前面
+            authorize.requestMatchers("/user/list").hasAuthority("USER_LIST");
+            authorize.requestMatchers("/user/add").hasAuthority("USER_ADD");
+
             authorize.anyRequest().authenticated();  // 所有的request都要进行认证，已经被authenticated的用户就能够access
         });
 
@@ -50,6 +54,9 @@ public class SecurityConfig {
         // 当没有登陆就访问一个受限资源时的处理handler
         httpSecurity.exceptionHandling((exception) -> {
             exception.authenticationEntryPoint(new TestAuthenticationEntryPoint());
+
+            // 指定当没有权限访问某个资源时，由哪个handler处理
+            exception.accessDeniedHandler(new TestAccessDeniedHandler());
         });
 
         httpSecurity.sessionManagement((session) -> {

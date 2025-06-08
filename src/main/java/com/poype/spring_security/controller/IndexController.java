@@ -31,4 +31,14 @@ public class IndexController {
 
         return result;
     }
+
+    @GetMapping("/user/list")
+    public String userList() {
+        return "User List Page";
+    }
+
+    @GetMapping("/user/add")
+    public String userAdd() {
+        return "User Add Page";
+    }
 }
