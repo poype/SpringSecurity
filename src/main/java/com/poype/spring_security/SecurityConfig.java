@@ -66,6 +66,10 @@ public class SecurityConfig {
             session.maximumSessions(1).expiredSessionStrategy(new TestSessionExpiredStrategy());
         });
 
+        httpSecurity.securityContext((securityContext) -> {
+            securityContext.securityContextRepository(new RedisSecurityContextRepository());
+        });
+
         return httpSecurity.build();
     }
 }
