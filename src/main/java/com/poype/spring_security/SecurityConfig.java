@@ -66,6 +66,7 @@ public class SecurityConfig {
             session.maximumSessions(1).expiredSessionStrategy(new TestSessionExpiredStrategy());
         });
 
+        // 定义加载SecurityContext的方式，默认是从HttpSession中加载，改成从redis中加载SecurityContext
         httpSecurity.securityContext((securityContext) -> {
             securityContext.securityContextRepository(new RedisSecurityContextRepository());
         });
